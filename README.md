@@ -1,6 +1,8 @@
 # Laravel Filament Multi Role Menggunakan Spatie
 
-Deskripsi singkat proyek ini di sini. Jelaskan secara singkat apa yang Anda coba capai dengan proyek ini dan mengapa ini penting.
+Ini adalah sebuah template yang bisa digunakan dan dapat dikembangkan kembali  secara gratis.
+
+Disini terdapat pengaturan login multi role spatie.
 
 ## Prasyarat
 
@@ -16,11 +18,11 @@ Ikuti langkah-langkah berikut untuk menginstal proyek ini:
 
 1. Clone repositori ini ke komputer Anda:
    ```bash
-   git clone https://github.com/username/nama-repo.git
+   git clone https://github.com/veridetta/laravel_spatie_filament.git
 
 2. Pindah ke direktori proyek:
     ```bash
-    cd nama-repo
+    cd laravel_spatie_filament
 
 3. Salin file `.env.example` menjadi `.env` dan sesuaikan dengan pengaturan Anda:
     ```bash
@@ -61,7 +63,7 @@ Ini akan membuat user admin dengan informasi login berikut:
 ##Mengakses Area Admin
 Setelah membuat user admin, Anda dapat mengakses area admin dengan mengunjungi URL berikut:
 ```bash
-http://127.0.0.1:8000/admin/users
+http://127.0.0.1:8000/admin/
 ```
 
 
@@ -97,13 +99,22 @@ Untuk membuat model atau resource baru silahkan ikut langkah-langkah berikut:
     ```bash
     php artisan make:policy NamaModelPolicy --model=NamaModel
     ```
-2. Setting `Policies/NamaModelPolicy.php`
+2. Assign Permission di menu admin
+3. Setting `Policies/NamaModelPolicy.php`
     pada fungsi `viewAny`,`create`,`update`,`delete` tambahkan ini
     ```bash
-    return $user->hasRole('Admin'); //single role
-    return $user->hasRole(['Admin','User']); //multiple role
+    if($user->hasPermissionTo('View NamaModel')){  //change Create or Update, or Delete NamaModel
+            return true;
+    }
+    return false;
     ```
-3. 
+4. Untuk mengganti `Admin` ke `Super Admin` (optional)
+   Buka file `AuthServiceProvider.php` tambahkan ini di `boot`
+   ```php
+   Gate::before(function ($user, $ability){
+            return $user->hasRole('Admin')?true : null; //ubah ke Super Admin
+        });
+   ```
 
 ## Kontribusi
 
@@ -111,11 +122,11 @@ Jika Anda ingin berkontribusi pada proyek ini, silakan buka [CONTRIBUTING.md](CO
 
 ## Lisensi
 
-Proyek ini dilisensikan di bawah lisensi [nama-lisensi](LICENSE.md).
+Proyek ini dilisensikan di bawah lisensi [MIT](LICENSE.md).
 
 ## Kontak
 
-Jika Anda memiliki pertanyaan atau masalah terkait proyek ini, silakan hubungi [nama-anda](https://github.com/nama-anda).
+Jika Anda memiliki pertanyaan atau masalah terkait proyek ini, silakan hubungi [veridetta](https://github.com/veridetta).
 
 ## Pengakuan
 

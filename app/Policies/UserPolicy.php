@@ -12,7 +12,10 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasRole('Admin');
+        if($user->hasPermissionTo('View Users')){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -28,7 +31,10 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return $user->hasRole('Admin');
+        if($user->hasPermissionTo('Create Users')){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -36,7 +42,10 @@ class UserPolicy
      */
     public function update(User $user)
     {
-        return $user->hasRole('Admin');
+        if($user->hasPermissionTo('Update User')){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -44,7 +53,10 @@ class UserPolicy
      */
     public function delete(User $user)
     {
-        return $user->hasRole('Admin');
+        if($user->hasPermissionTo('Delete Users')){
+            return true;
+        }
+        return false;
     }
 
     /**
