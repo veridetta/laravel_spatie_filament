@@ -1,66 +1,124 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Filament Multi Role Menggunakan Spatie
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Deskripsi singkat proyek ini di sini. Jelaskan secara singkat apa yang Anda coba capai dengan proyek ini dan mengapa ini penting.
 
-## About Laravel
+## Prasyarat
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sebelum Anda memulai dengan proyek ini, pastikan Anda memiliki prasyarat berikut:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Laravel 10](https://laravel.com/docs/10.x)
+- [Filament 3](https://filamentapp.com/)
+- [Spatie Permission](https://spatie.be/docs/laravel-permission)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalasi
 
-## Learning Laravel
+Ikuti langkah-langkah berikut untuk menginstal proyek ini:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Clone repositori ini ke komputer Anda:
+   ```bash
+   git clone https://github.com/username/nama-repo.git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. Pindah ke direktori proyek:
+    ```bash
+    cd nama-repo
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Salin file `.env.example` menjadi `.env` dan sesuaikan dengan pengaturan Anda:
+    ```bash
+    cp .env.example .env
+    ```
 
-## Laravel Sponsors
+4. Jalankan perintah berikut untuk menginstal semua dependensi:
+    ```bash
+    composer install
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. Jalankan migrasi dan isi database:
+    ```bash
+    php artisan migrate --seed
+    ```
 
-### Premium Partners
+6. Terakhir, jalankan server pengembangan:
+    ```bash
+    php artisan serve
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
 
-## Contributing
+## Penggunaan
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Membuat User Admin
 
-## Code of Conduct
+Untuk membuat user admin, jalankan perintah berikut untuk memproses data pengisian awal:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan db:seed --class=NamaSeeder
+```
 
-## Security Vulnerabilities
+Ini akan membuat user admin dengan informasi login berikut:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Email: admin@gmail.com
+- Password: password
 
-## License
+##Mengakses Area Admin
+Setelah membuat user admin, Anda dapat mengakses area admin dengan mengunjungi URL berikut:
+```bash
+http://127.0.0.1:8000/admin/users
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+Pastikan Anda menggunakan informasi login yang sesuai untuk mengakses area admin.
+
+##Menambahkan Model Baru
+Untuk membuat model atau resource baru silahkan ikut langkah-langkah berikut:
+1. Buat Model  dan Migration
+    ```bash
+    php artisan make:model NamaModel -m
+    ```
+
+2. Migrasi
+    ```bash
+    php artisan migrate
+    ```
+
+3. Buat resource Filament
+    ```bash
+    php artisan make:filament-resource NamaModelResource
+    ```
+
+4. Untuk melakukan direct setelah buat data baru silahkan insert ini pada CreateResource
+    ```php
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+    ```
+
+## Untuk Setting Agar Bisa ditampilkan pada role tertentu
+1. Buat Policy
+    ```bash
+    php artisan make:policy NamaModelPolicy --model=NamaModel
+    ```
+2. Setting `Policies/NamaModelPolicy.php`
+    pada fungsi `viewAny`,`create`,`update`,`delete` tambahkan ini
+    ```bash
+    return $user->hasRole('Admin'); //single role
+    return $user->hasRole(['Admin','User']); //multiple role
+    ```
+3. 
+
+## Kontribusi
+
+Jika Anda ingin berkontribusi pada proyek ini, silakan buka [CONTRIBUTING.md](CONTRIBUTING.md) untuk panduan kontribusi.
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah lisensi [nama-lisensi](LICENSE.md).
+
+## Kontak
+
+Jika Anda memiliki pertanyaan atau masalah terkait proyek ini, silakan hubungi [nama-anda](https://github.com/nama-anda).
+
+## Pengakuan
+
+Terima kasih kepada [Spatie](https://spatie.be/) dan komunitas Laravel dan Filament atas dukungan dan inspirasi mereka.
+
+
