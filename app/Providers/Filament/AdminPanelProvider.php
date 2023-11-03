@@ -57,6 +57,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
+                     ->label('Inserts')
+                     ,
+                NavigationGroup::make()
                      ->label('Report')
                      ,
                 NavigationGroup::make()

@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reports', function (Blueprint $table) {
-            $table->text('description')->nullable();
-            $table->enum('task', ['No Task', 'Belum', 'Selesai'])->default('No Task');
+            //
         });
     }
 
@@ -23,6 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('reports', function (Blueprint $table) {
+            $table->dropColumn('division');
+            $table->dropColumn('image');
             $table->dropColumn('description');
             $table->dropColumn('task');
         });

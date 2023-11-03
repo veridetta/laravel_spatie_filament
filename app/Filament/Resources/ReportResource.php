@@ -3,22 +3,32 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReportResource\Pages;
-use App\Filament\Resources\ReportResource\RelationManagers;
 use App\Models\Report;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Filament\Resources\TaskResource\Pages\CreateTask;
+use App\Filament\Resources\TaskResource\Pages\EditTask;
+use App\Filament\Resources\TaskResource\Pages\ListTasks;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Contracts\Support\Htmlable;
+
 class ReportResource extends Resource
 {
     protected static ?string $model = Report::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
-    protected static ?string $navigationGroup = 'Reports';
+    protected static ?string $navigationGroup = 'Inserts';
+    protected static string $view = 'filament.resources.report.pages.view-report';
+    public static function getRecordTitle(?Model $record): string|null|Htmlable
+    {
+        return $record->date;
+    }
 
     public static function form(Form $form): Form
     {
@@ -31,52 +41,44 @@ class ReportResource extends Resource
                     'Afternoon' => 'Afternoon',
                 ])->required()
                 ->label('Jenis Laporan'),
-                Forms\Components\Select::make('division')->options([
-                    'Umum' => 'Umum',
-                    'Publik' => 'Publik',
-                    'E-Gov' => 'E-Gov',
-                ])->required()
-                ->label('Divisi'),
-                Forms\Components\Select::make('task')->options([
-                    'No Task' => 'No Task',
-                    'Belum' => 'Belum',
-                    'Selesai' => 'Selesai',
-                ])->required()
-                ->label('Task'),
-                //description
-                Forms\Components\Textarea::make('description')->required(),
-                Forms\Components\FileUpload::make('image')->image()->required()
-                ->label('Gambar')
-                ->columnSpanFull(),
+
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID'),
-                Tables\Columns\TextColumn::make('date')->label('Tanggal'),
+                Tables\Columns\TextColumn::make('date')->label('Tanggal')->date('d-M-Y')->searchable(),
                 Tables\Columns\TextColumn::make('type')->label('Jenis Laporan'),
-                Tables\Columns\TextColumn::make('division')->label('Divisi'),
-                Tables\Columns\ImageColumn::make('image')->label('Gambar'),
-                Tables\Columns\TextColumn::make('task')->label('Task'),
-                Tables\Columns\TextColumn::make('description')->label('Deskripsi'),
+
             ])
             ->filters([
-                //
+                SelectFilter::make('task')
+                ->options([
+                    'Morning' => 'Morning',
+                    'Afternoon' => 'Afternoon',
+                ])
+                ->label('Jenis Laporan')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('Manage Tasks')
+                ->color('success')
+                ->icon('heroicon-o-clipboard-document-list')
+                ->url(
+                    fn (Report $record): string => static::getUrl('tasks.index', [
+                        'parent' => $record->id,
+                    ])
+                ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->recordUrl(
-                fn (Model $record): string => route('reports.detail', ['record' => $record]),
-            )
             ;
     }
 
@@ -93,10 +95,12 @@ class ReportResource extends Resource
             'index' => Pages\ListReports::route('/'),
             'create' => Pages\CreateReport::route('/create'),
             'edit' => Pages\EditReport::route('/{record}/edit'),
+
+             // Task
+             'tasks.index' => ListTasks::route('/{parent}/tasks'),
+             'tasks.create' => CreateTask::route('/{parent}/tasks/create'),
+             'tasks.edit' => EditTask::route('/{parent}/tasks/{record}/edit'),
         ];
     }
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return static::getModel()::count() > 1 ? 'warning' : 'primary';
-    }
+
 }

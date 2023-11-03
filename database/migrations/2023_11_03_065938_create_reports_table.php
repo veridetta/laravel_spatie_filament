@@ -16,8 +16,6 @@ return new class extends Migration
             //tanggal, jenis (Morning, Afternoon), divisi (Umum, Publik, E-Gov), image
             $table->date('date');
             $table->enum('type', ['Morning', 'Afternoon']);
-            $table->enum('division', ['Umum', 'Publik', 'E-Gov']);
-            $table->string('image');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
