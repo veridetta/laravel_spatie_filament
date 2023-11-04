@@ -23,7 +23,15 @@ class SettingResource extends Resource
     {
         return $form
             ->schema([
-                //
+                //name, logo, server
+                Forms\Components\TextInput::make('name')->required()->label('Nama Website'),
+                Forms\Components\TextInput::make('server')->required()->label('Server'),
+                Forms\Components\FileUpload::make('logo')
+                ->image()->required()
+                ->directory('reports')
+                ->visibility('public')
+                ->label('Gambar')
+                ->columnSpanFull()
             ]);
     }
 
@@ -31,7 +39,9 @@ class SettingResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('server')->searchable()->sortable(),
+                Tables\Columns\ImageColumn::make('logo')->circular(),
             ])
             ->filters([
                 //

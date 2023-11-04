@@ -10,20 +10,22 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-
 use App\Filament\Resources\TaskResource\Pages\CreateTask;
 use App\Filament\Resources\TaskResource\Pages\EditTask;
 use App\Filament\Resources\TaskResource\Pages\ListTasks;
+use App\Models\User;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Contracts\Support\Htmlable;
-
+use Illuminate\Database\Eloquent\Builder;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 class ReportResource extends Resource
 {
     protected static ?string $model = Report::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
-    protected static ?string $navigationGroup = 'Inserts';
+    protected static ?string $navigationGroup = 'Reports';
     protected static string $view = 'filament.resources.report.pages.view-report';
     public static function getRecordTitle(?Model $record): string|null|Htmlable
     {
@@ -45,15 +47,25 @@ class ReportResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        if(auth()->user()->role == 'admin'){
+            return parent::getEloquentQuery();
+        }else{
+            return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
+        }
 
+    }
     public static function table(Table $table): Table
     {
         return $table
+
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID'),
                 Tables\Columns\TextColumn::make('date')->label('Tanggal')->date('d-M-Y')->searchable(),
                 Tables\Columns\TextColumn::make('type')->label('Jenis Laporan'),
-
+                //tampilkan nama user
+                TextColumn::make('users.name')->label('Nama User'),
             ])
             ->filters([
                 SelectFilter::make('task')
@@ -61,7 +73,8 @@ class ReportResource extends Resource
                     'Morning' => 'Morning',
                     'Afternoon' => 'Afternoon',
                 ])
-                ->label('Jenis Laporan')
+                ->label('Jenis Laporan'),
+                DateRangeFilter::make('date')->label('Tanggal'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
