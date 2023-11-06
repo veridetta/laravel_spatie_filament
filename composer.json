@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.8",
         "leandrocfe/filament-apex-charts": "3.0",
         "malzariey/filament-daterangepicker-filter": "^2.3",
+        "rupadana/filament-api-service": "^1.0",
         "spatie/laravel-permission": "^6.0"
     },
     "require-dev": {

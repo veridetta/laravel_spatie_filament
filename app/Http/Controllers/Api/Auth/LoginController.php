@@ -8,13 +8,7 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required'],
@@ -24,13 +18,36 @@ class LoginController extends Controller
         if (auth()->attempt($credentials)) {
             $user = auth()->user();
 
-            return (new UserResource($user))->additional([
-                'token' => $user->createToken('myAppToken')->plainTextToken,
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Login successful.',
+                'data' => [
+                    'user' => new UserResource($user),
+                    'token' => $user->createToken('myAppToken')->plainTextToken,
+                ],
             ]);
         }
 
         return response()->json([
+            'status' => 'failure',
             'message' => 'Your credential does not match.',
+        ], 401);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'You have been successfully logged out.',
+        ]);
+    }
+
+    public function login_get(Request $request)
+    {
+        return response()->json([
+            'status' => 'not-authorized',
+            'message' => 'You are not authorized.',
         ], 401);
     }
 }

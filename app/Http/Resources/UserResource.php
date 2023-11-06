@@ -5,6 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use Illuminate\Auth\AuthenticationException;
+
 class UserResource extends JsonResource
 {
     /**
@@ -20,4 +22,12 @@ class UserResource extends JsonResource
             'email' => $this->email,
         ];
     }
+    protected function unauthenticated($request, AuthenticationException $exception)
+{
+    if ($request->expectsJson()) {
+        return response()->json(['message' => 'Your custom message'], 401);
+    }
+
+    return response()->json([ 'valid' => auth()->check() ], 404);
+}
 }

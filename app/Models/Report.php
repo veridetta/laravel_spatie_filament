@@ -10,6 +10,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Report extends Model
 {
     use HasFactory;
+    public static array $allowedFields = [
+        'date',
+        'type',
+        'user_id'
+    ];
+
+    public static array $allowedSorts = [
+        'date',
+        'created_at'
+    ];
+
+    public static array $allowedFilters = [
+        'date',
+        'user_id'
+    ];
 
     protected static function booted()
     {
