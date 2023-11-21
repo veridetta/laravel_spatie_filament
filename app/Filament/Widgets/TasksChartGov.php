@@ -6,7 +6,7 @@ use Illuminate\Contracts\View\View;
 use App\Models\Task;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class TasksChart extends ApexChartWidget
+class TasksChartGov extends ApexChartWidget
 {
     protected static ?int $sort = 1;
     /**
@@ -21,7 +21,7 @@ class TasksChart extends ApexChartWidget
      *
      * @var string|null
      */
-    protected static ?string $heading = 'Task Controller - Divisi Umum';
+    protected static ?string $heading = 'Task Controller - Divisi E-Gov';
 
     /**
      * Chart options (series, labels, types, size, animations...)
@@ -31,9 +31,9 @@ class TasksChart extends ApexChartWidget
      */
     protected function getFooter(): string|View
     {
-        $finished = Task::where('task', 'Selesai')->where('division','Umum')->count();
-        $noCount = Task::where('task', 'No Task')->where('division','Umum')->count();
-        $total = Task::where('division','Umum')->count();
+        $finished = Task::where('task', 'Selesai')->where('division','E-Gov')->count();
+        $noCount = Task::where('task', 'No Task')->where('division','E-Gov')->count();
+        $total = Task::where('division','E-Gov')->count();
         $data = [
             'total' => $total,
             'selesai' => $finished,
@@ -45,9 +45,9 @@ class TasksChart extends ApexChartWidget
 
     protected function getOptions(): array
     {
-        $finished = Task::where('task', 'Selesai')->where('division','Umum')->count() ;
-        $noCount = Task::where('task', 'No Task')->where('division','Umum')->count() ;
-        $total = Task::where('division','Umum')->count()-$noCount ;
+        $finished = Task::where('task', 'Selesai')->where('division','E-Gov')->count() ;
+        $noCount = Task::where('task', 'No Task')->where('division','E-Gov')->count() ;
+        $total = Task::where('division','E-Gov')->count()-$noCount ;
         if($finished <1 || $total <1){
             $percentage = 0;
         }else{

@@ -36,9 +36,8 @@ class Report extends Model
     {
         return $this->hasMany(Task::class);
     }
-    public function users(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
 }

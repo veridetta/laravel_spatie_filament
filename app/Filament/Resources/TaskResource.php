@@ -42,7 +42,8 @@ class TaskResource extends Resource
                 Forms\Components\Textarea::make('description')->required()
                 ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image')
-                ->image()->required()
+                ->image()
+                ->default('')
                 ->directory('reports')
                 ->visibility('public')
                 ->label('Gambar')

@@ -14,6 +14,8 @@ use App\Filament\Resources\TaskResource\Pages\CreateTask;
 use App\Filament\Resources\TaskResource\Pages\EditTask;
 use App\Filament\Resources\TaskResource\Pages\ListTasks;
 use App\Models\User;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -37,13 +39,12 @@ class ReportResource extends Resource
         return $form
             ->schema([
                 //user_id,tanggal, divisi,image, task, description
-                Forms\Components\DateTimePicker::make('date')->required()->default(now())->label('Tanggal'),
-                Forms\Components\Select::make('type')->options([
+                Forms\Components\DatePicker::make('date')->required()->default(now())->label('Tanggal'),
+                Select::make('type')->options([
                     'Morning' => 'Morning',
                     'Afternoon' => 'Afternoon',
                 ])->required()
                 ->label('Jenis Laporan'),
-
             ]);
     }
 
@@ -54,21 +55,18 @@ class ReportResource extends Resource
         }else{
             return parent::getEloquentQuery()->where('user_id', auth()->user()->id);
         }
-
     }
     public static function table(Table $table): Table
     {
         return $table
-
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID'),
+                TextColumn::make('user.name')->label('Nama'),
                 Tables\Columns\TextColumn::make('date')->label('Tanggal')->date('d-M-Y')->searchable(),
                 Tables\Columns\TextColumn::make('type')->label('Jenis Laporan'),
-                //tampilkan nama user
-                TextColumn::make('users.name')->label('Nama User'),
             ])
             ->filters([
-                SelectFilter::make('task')
+                SelectFilter::make('type')
                 ->options([
                     'Morning' => 'Morning',
                     'Afternoon' => 'Afternoon',

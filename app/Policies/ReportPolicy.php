@@ -13,10 +13,8 @@ class ReportPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->hasPermissionTo('View Reports')){
-            return true;
-        }
-        return false;
+
+        return true;
     }
 
     /**
@@ -24,7 +22,7 @@ class ReportPolicy
      */
     public function view(User $user, Report $report)
     {
-        //
+        return true;
     }
 
     /**
@@ -32,10 +30,7 @@ class ReportPolicy
      */
     public function create(User $user)
     {
-        if($user->hasPermissionTo('Create Reports')){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -43,10 +38,7 @@ class ReportPolicy
      */
     public function update(User $user, Report $report)
     {
-        if($user->hasPermissionTo('Update Reports')){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -54,10 +46,7 @@ class ReportPolicy
      */
     public function delete(User $user, Report $report)
     {
-        if($user->hasPermissionTo('Delete Reports')){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -65,7 +54,7 @@ class ReportPolicy
      */
     public function restore(User $user, Report $report)
     {
-        //
+        return true;
     }
 
     /**
@@ -73,6 +62,6 @@ class ReportPolicy
      */
     public function forceDelete(User $user, Report $report)
     {
-        //
+        return true;
     }
 }
